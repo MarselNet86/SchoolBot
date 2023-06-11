@@ -12,7 +12,7 @@ from Cue import *
 from config import *
 from db import connection
 
-bot: Bot = Bot(token=token, parse_mode='HTML')  # регестрируем бота
+bot: Bot = Bot(token='5913275467:AAECSyGhjceR5ztRkt7GV4rLyKzNQy0c6-g', parse_mode='HTML')  # регестрируем бота
 dp: Dispatcher = Dispatcher(bot=bot)
 score = {}
 
@@ -48,6 +48,8 @@ async def start(message: Message):
 @dp.callback_query(lambda x: x.data == 'user_results')
 async def user_results(callback: CallbackQuery):
     await bot.delete_message(callback.from_user.id, callback.message.message_id)
+    menu = InlineKeyboardButton(text='Главное меню', callback_data='menu')
+    key_menu = InlineKeyboardMarkup(inline_keyboard=[[menu]])
 
     tiers = ['age7', 'age8', 'age9', 'age10']
     classes = ['1 класс', '2 класс', '3 класс', '4 класс']
@@ -72,14 +74,14 @@ async def user_results(callback: CallbackQuery):
 
         message += '\n'
 
-    await callback.message.answer(message)
-
+    await callback.message.answer(message, reply_markup=key_menu)
 
 
 @dp.callback_query(lambda x: x.data =='callb')
 async def callb(callback: CallbackQuery):
     await callback.message.answer('дорогой друг! Если у тебя возникли проблемы или пожелания по работе бота,'
                                   'пиши @slvanay_vv или @NikitaKozhemaka')
+
 
 @dp.callback_query(lambda x: x.data == 'menu')
 async def start(callback: CallbackQuery):
@@ -92,6 +94,7 @@ async def start(callback: CallbackQuery):
         'Здравствуй, дорогой друг! Сегодня ты сможешь поиграть в небольшую игру, '
         'а также проверить свои знания. '
         'Ты готов? Если да, то давай начнем!', reply_markup=key_b)
+
 
 @dp.callback_query(lambda x: x.data == 'clue')
 async def category_cue(callback: CallbackQuery):
@@ -168,6 +171,7 @@ async def category_cue(callback: CallbackQuery):
     await bot.send_photo(callback.from_user.id, photo=cue48)
     await bot.send_photo(callback.from_user.id, photo=cue49)
     await callback.message.answer('главное меню' , reply_markup=key_menu)
+
 
 @dp.callback_query(lambda x: x.data == 'game')
 async def category(callback: CallbackQuery):
@@ -465,6 +469,7 @@ async def class3answer7(message: Message, state: FSMContext):
     await message.answer('7. Найдите продолжение пословицы. Тише едешь … ', reply_markup=cl3answ7)
     await state.clear()
 
+
 @dp.callback_query(lambda x: x.data in ['today', 'batter', 'mind', 'next'])
 async def class3answer8(callback: CallbackQuery):
     if callback.data == 's80':
@@ -577,8 +582,6 @@ async def class4answer6(callback: CallbackQuery):
     await bot.delete_message(callback.from_user.id, callback.message.message_id)
     await callback.message.answer('6. Укажите порядок расположения полос на Государственном флаге Российской Федерации '
                                   , reply_markup=cl4answ6)
-
-
 
 
 @dp.callback_query(lambda x: x.data in  ['a461', 'a462', 'a463', 'a464'])
