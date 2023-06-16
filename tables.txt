@@ -1,0 +1,14 @@
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  user_id BIGINT, 
+  register_date TIMESTAMP DEFAULT NOW()
+);
+
+
+CREATE TABLE results (
+ id SERIAL PRIMARY KEY,
+ fk_id INT REFERENCES users(id),
+ tier VARCHAR(10),
+ result_number INT
+ 
+ );

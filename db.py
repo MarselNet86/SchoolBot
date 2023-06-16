@@ -3,7 +3,7 @@ from config import host, user, password, db_name, port
 
 
 class Database:
-    def __init__(self, host, user, password, database, port):
+    def __init__(self, database):
         self.connection = psycopg2.connect(
             host=host,
             user=user,
@@ -13,11 +13,29 @@ class Database:
         )
         self.connection.autocommit = True
 
-    def get_version(self):
-        """Получить версию СУБД PostgreSQL"""
+    def create_tables(self):
+        """Создать таблицы users и results, если они отсутствуют"""
         with self.connection.cursor() as cursor:
-            cursor.execute("SELECT version();")
-            print(f'Server version: {cursor.fetchone()[0]}')
+            # Создание таблицы users, если она не существует
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id SERIAL PRIMARY KEY,
+                    user_id BIGINT,
+                    register_date TIMESTAMP DEFAULT NOW()
+                );
+            """)
+
+            # Создание таблицы results, если она не существует
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS results (
+                    id SERIAL PRIMARY KEY,
+                    fk_id INT REFERENCES users(id),
+                    tier VARCHAR(10),
+                    result_number INT
+                );
+            """)
+
+        print("Таблицы успешно созданы или уже существуют.")
 
     def user_exists(self, user_id):
         """Проверить пользователя на существование в таблице"""
@@ -85,3 +103,4 @@ class Database:
 
 
 connection = Database(host, user, password, db_name, port)
+connection.create_tables()
