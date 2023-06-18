@@ -3,7 +3,7 @@ from config import host, user, password, db_name, port
 
 
 class Database:
-    def __init__(self, database):
+    def __init__(self, host, user, password, database, port):
         self.connection = psycopg2.connect(
             host=host,
             user=user,
