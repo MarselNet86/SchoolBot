@@ -12,7 +12,7 @@ from Cue import *
 from config import *
 from db import connection
 
-bot: Bot = Bot(token='5913275467:AAECSyGhjceR5ztRkt7GV4rLyKzNQy0c6-g', parse_mode='HTML')  # регестрируем бота
+bot: Bot = Bot(token=token, parse_mode='HTML')  # регестрируем бота
 dp: Dispatcher = Dispatcher(bot=bot)
 score = {}
 
